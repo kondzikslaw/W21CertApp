@@ -14,7 +14,6 @@ do
         "X - Exit the program\n");
     var input = Console.ReadLine();
     
-
     switch (input.ToUpper())
     {
         case "1":
@@ -46,6 +45,9 @@ do
     }
 } while (!AppClose);
 
+Console.WriteLine("Goodbye. Press any key to exit.");
+Console.ReadKey();
+
 void AddResultsToMemory()
 {
     Console.WriteLine("Insert the product name:");
@@ -71,6 +73,7 @@ void AddResultsToMemory()
     if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(type))
     {
         var productInMemory = new Product(name, type, declaredNetWeight);
+        productInMemory.DifferenceOfNetWeightTooMuch += ProductDifferenceOfNetWeightTooMuch;
         EnterResults(productInMemory);
         productInMemory.ShowStatistics();
     }
@@ -91,7 +94,7 @@ void AddResultsToFile()
     {
         Console.WriteLine("Insert the product declared net weight in grams:");
         string declaredNetWeightString = Console.ReadLine();
-
+  
         if (float.TryParse(declaredNetWeightString, out float result))
         {
             declaredNetWeight += result;
@@ -105,6 +108,7 @@ void AddResultsToFile()
     if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(type))
     {
         var productInFile = new ProductInFile(name, type, declaredNetWeight);
+        productInFile.DifferenceOfNetWeightTooMuch += ProductDifferenceOfNetWeightTooMuch;
         productInFile.fullFileName = $"{id}_{productInFile.fullFileName}";
         id++;
         EnterResults(productInFile);
@@ -115,13 +119,6 @@ void AddResultsToFile()
         throw new Exception("Incomplete data. Please try again.");
     }
 }
-//float DeclaredWeightStringCheck(string weight)
-//{
-//    if (float.TryParse(weight, out float result))
-//    {
-//        return result;
-//    }
-//}
 
 static void EnterResults(IProduct product)
 {
@@ -149,25 +146,7 @@ static void EnterResults(IProduct product)
     }
 }
 
-//var product1 = new ProductInFile("Sausage", "Meat", 500);
-//var product2 = new ProductInFile("Chicken Bites", "Meat", 400);
-//product1.DifferenceOfNetWeightTooMuch += ProductDifferenceOfNetWeightTooMuch;
-
-
-//product1.AddNetWeight(5);
-//product1.AddNetWeight(0.7f);
-//product1.AddNetWeight(6.13f);
-//product1.AddNetWeight("13,2");
-
-//product2.AddNetWeight(415.33f);
-//product2.AddNetWeight(399.7f);
-//product2.AddNetWeight(387.13f);
-//product2.AddNetWeight("401,2");
-
-//product1.ShowStatistics();
-//product2.ShowStatistics();
-
-//void ProductDifferenceOfNetWeightTooMuch(object sender, EventArgs e)
-//{
-//    Console.WriteLine("Difference between Average and Declared Net Weight is too big. Please repeat the test.");
-//}
+void ProductDifferenceOfNetWeightTooMuch(object sender, EventArgs e)
+{
+    Console.WriteLine("Difference between Average and Declared Net Weight is too big. It shouldn't greater than 5g. Please repeat the test.");
+}
